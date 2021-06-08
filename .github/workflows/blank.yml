@@ -15,8 +15,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains banana testing job
+  sonarqube:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -25,12 +25,103 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Run "danger" script
+        run: echo Mock danger
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: check-git-changes
+        run: echo Mock check-git-changes
+
+      - name: reconcile-config-check
+        run: echo Mock reconcile-config-check
+
+      - name: sonarqube
+        run: echo Mock sonarqube
+        
+  root:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: npm-auth-root-folder
+        run: echo Mock npm-auth-root-folder
+
+      - name: install-root
+        run: echo Mock install-root
+
+      - name: make-artifact
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo Mock make-artifact
+          mkdir -p path/to/rootArtifact
+          echo someRootArtifact > path/to/rootArtifact/rootArtifact.txt
+    
+      - uses: actions/upload-artifact@master
+        with:
+          name: root-artifact
+          path: path/to/rootArtifact
+        
+  common:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: npm-auth-common-folder
+        run: echo Mock npm-auth-common-folder
+
+      - name: install-common
+        run: echo Mock install-root
+
+      - name: make-artifact
+        run: |
+          echo Mock make-artifact
+          mkdir -p path/to/commonArtifact
+          echo someCommonArtifact > path/to/commonArtifact/commonArtifact.txt
+    
+      - uses: actions/upload-artifact@master
+        with:
+          name: common-artifact
+          path: path/to/commonArtifact
+        
+  main:
+    needs: [root, common]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: npm-auth-webapp-folder
+        run: echo Mock npm-auth-webapp-folder
+
+      - name: install-webapp
+        run: echo Mock install-webapp
+
+      - name: make-artifact
+        run: |
+          echo Mock make-artifact
+          mkdir -p path/to/appArtifact
+          echo someAppArtifact > path/to/appArtifact/appArtifact.txt
+    
+      # upload
+      - uses: actions/upload-artifact@master
+        with:
+          name: app-artifact
+          path: path/to/appArtifact
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: root-artifact
+          path: path/to/rootArtifact
+
+      - name: check rootArtifact
+        run: cat path/to/rootArtifact/rootArtifact.txt
