@@ -50,11 +50,8 @@ jobs:
         run: echo Mock npm-auth-root-folder
 
       - name: install-root
-        run: echo Mock install-root
-
-      - name: make-artifact
         run: |
-          echo Mock make-artifact
+          echo Mock install-root
           mkdir -p node_modules
           echo someRootArtifact > node_modules/rootArtifact.txt
     
@@ -76,19 +73,16 @@ jobs:
         run: echo Mock npm-auth-common-folder
 
       - name: install-common
-        run: echo Mock install-root
-
-      - name: make-artifact
         run: |
-          echo Mock make-artifact
-          mkdir -p path/to/commonArtifact
-          echo someCommonArtifact > path/to/commonArtifact/commonArtifact.txt
+          echo Mock install-common
+          mkdir -p packages/common/commonArtifact
+          echo someCommonArtifact > packages/common/commonArtifact.txt
     
       # upload
       - uses: actions/upload-artifact@master
         with:
           name: common-artifact
-          path: path/to/commonArtifact
+          path: packages/common/commonArtifact
         
   webapp:
     # The type of runner that the job will run on
@@ -103,11 +97,8 @@ jobs:
         run: echo Mock npm-auth-webapp-folder
 
       - name: install-webapp
-        run: echo Mock install-webapp
-
-      - name: make-artifact
         run: |
-          echo Mock make-artifact
+          echo Mock install-webapp
           mkdir -p packages/webapp/node_modules
           echo someAppArtifact > packages/webapp/node_modules/appArtifact.txt
     
@@ -135,7 +126,9 @@ jobs:
 
       - name: check artifact
         run: |
+          echo current directory:
           ls
+          echo Read an artifact:
           cat node_modules/rootArtifact.txt
 
       - name: build-webapp
@@ -168,7 +161,9 @@ jobs:
 
       - name: check artifact
         run: |
+          echo current directory:
           ls
+          echo Read an artifact:
           cat node_modules/rootArtifact.txt
 
 
