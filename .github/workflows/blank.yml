@@ -84,6 +84,30 @@ jobs:
           name: common-artifact
           path: packages/common/commonArtifact
         
+  server:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: npm-auth-server-folder
+        run: echo Mock npm-auth-server-folder
+
+      - name: install-server
+        run: |
+          echo Mock install-server
+          mkdir -p packages/server/node_modules
+          echo someServerArtifact > packages/server/node_modules/serverArtifact.txt
+    
+      # upload
+      - uses: actions/upload-artifact@master
+        with:
+          name: server-artifact
+          path: packages/server/node_modules
+        
   webapp:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -108,8 +132,46 @@ jobs:
           name: app-artifact
           path: packages/webapp/node_modules
         
+  static-checks:
+    needs: [root, common, server, webapp]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: root-artifact
+          path: node_modules
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: common-artifact
+          path: packages/common/commonArtifact
+
+      - name: check artifact
+        run: |
+          echo current directory:
+          ls
+
+      - name: static-checks
+        run: |
+          echo Mock flow-common
+          echo Mock lint-common
+          echo Mock flow-server
+          echo Mock lint-server
+          echo Mock flow-webapp
+          echo Mock lint-webapp
+          echo Mock test-server
+          echo Mock test-webapp
+        
   build:
-    needs: [root, common, webapp]
+    needs: [root, common, server, webapp]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -173,5 +235,4 @@ jobs:
           cat node_modules/rootArtifact.txt
           echo Read buildArtifact:
           cat packages/webapp/build/appArtifact.txt
-
 
