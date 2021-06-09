@@ -75,14 +75,14 @@ jobs:
       - name: install-common
         run: |
           echo Mock install-common
-          mkdir -p packages/common/commonArtifact
-          echo someCommonArtifact > packages/common/commonArtifact.txt
+          mkdir -p packages/common/node_modules
+          echo someCommonArtifact > packages/common/node_modules/commonArtifact.txt
     
       # upload
       - uses: actions/upload-artifact@master
         with:
           name: common-artifact
-          path: packages/common/commonArtifact
+          path: packages/common/node_modules
         
   server:
     # The type of runner that the job will run on
@@ -152,7 +152,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: common-artifact
-          path: packages/common/commonArtifact
+          path: packages/common/node_modules
 
       - name: check artifact
         run: |
