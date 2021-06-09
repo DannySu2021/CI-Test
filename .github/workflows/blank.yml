@@ -57,7 +57,7 @@ jobs:
     
       - uses: actions/upload-artifact@master
         with:
-          name: root-artifact
+          name: install-root-artifact
           path: node_modules
         
   common:
@@ -81,7 +81,7 @@ jobs:
       # upload
       - uses: actions/upload-artifact@master
         with:
-          name: common-artifact
+          name: install-common-artifact
           path: packages/common/node_modules
         
   server:
@@ -105,7 +105,7 @@ jobs:
       # upload
       - uses: actions/upload-artifact@master
         with:
-          name: server-artifact
+          name: install-server-artifact
           path: packages/server/node_modules
         
   webapp:
@@ -129,7 +129,7 @@ jobs:
       # upload
       - uses: actions/upload-artifact@master
         with:
-          name: app-artifact
+          name: install-webapp-artifact
           path: packages/webapp/node_modules
         
   static-checks:
@@ -145,13 +145,13 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: root-artifact
+          name: install-root-artifact
           path: node_modules
 
       # download
       - uses: actions/download-artifact@master
         with:
-          name: common-artifact
+          name: install-common-artifact
           path: packages/common/node_modules
 
       - name: check artifact
@@ -183,7 +183,7 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: root-artifact
+          name: install-root-artifact
           path: node_modules
 
       - name: check artifact
@@ -208,13 +208,13 @@ jobs:
       # upload
       - uses: actions/upload-artifact@master
         with:
-          name: buildServer-artifact
+          name: build-server-artifact
           path: packages/server/build
     
       # upload
       - uses: actions/upload-artifact@master
         with:
-          name: buildWebapp-artifact
+          name: build-webapp-artifact
           path: packages/webapp/build
         
   main:
@@ -230,13 +230,13 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: root-artifact
+          name: install-root-artifact
           path: node_modules
 
       # download
       - uses: actions/download-artifact@master
         with:
-          name: buildWebapp-artifact
+          name: build-webapp-artifact
           path: packages/webapp/build
 
       - name: check artifact
@@ -270,7 +270,7 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: root-artifact
+          name: install-root-artifact
           path: node_modules
 
       - name: check artifact
@@ -301,7 +301,7 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: root-artifact
+          name: install-root-artifact
           path: node_modules
 
       - name: check artifact
@@ -331,7 +331,7 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: root-artifact
+          name: install-root-artifact
           path: node_modules
 
       - name: check artifact
@@ -361,7 +361,7 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: root-artifact
+          name: install-root-artifact
           path: node_modules
 
       - name: check artifact
