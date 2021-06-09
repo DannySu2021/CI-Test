@@ -159,11 +159,19 @@ jobs:
           name: root-artifact
           path: node_modules
 
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: appBuild-artifact
+          path: packages/webapp/build
+
       - name: check artifact
         run: |
           echo current directory:
           ls
-          echo Read an artifact:
+          echo Read rootArtifact:
           cat node_modules/rootArtifact.txt
+          echo Read buildArtifact:
+          cat packages/webapp/build/appArtifact.txt
 
 
