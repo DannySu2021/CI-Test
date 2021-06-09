@@ -84,13 +84,13 @@ jobs:
           mkdir -p path/to/commonArtifact
           echo someCommonArtifact > path/to/commonArtifact/commonArtifact.txt
     
+      # upload
       - uses: actions/upload-artifact@master
         with:
           name: common-artifact
           path: path/to/commonArtifact
         
-  main:
-    needs: [root, common]
+  webapp:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -108,14 +108,24 @@ jobs:
       - name: make-artifact
         run: |
           echo Mock make-artifact
-          mkdir -p path/to/appArtifact
-          echo someAppArtifact > path/to/appArtifact/appArtifact.txt
+          mkdir -p packages/webapp/node_modules
+          echo someAppArtifact > packages/webapp/node_modules/appArtifact.txt
     
       # upload
       - uses: actions/upload-artifact@master
         with:
           name: app-artifact
-          path: path/to/appArtifact
+          path: packages/webapp/node_modules
+        
+  build:
+    needs: [root, common, webapp]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
       # download
       - uses: actions/download-artifact@master
@@ -127,3 +137,26 @@ jobs:
         run: |
           ls
           cat node_modules/rootArtifact.txt
+        
+  main:
+    needs: [sonarqube, build]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: root-artifact
+          path: node_modules
+
+      - name: check rootArtifact
+        run: |
+          ls
+          cat node_modules/rootArtifact.txt
+
+
