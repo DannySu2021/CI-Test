@@ -37,7 +37,7 @@ jobs:
       - name: sonarqube
         run: echo Mock sonarqube
         
-  root:
+  install-root:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -60,7 +60,7 @@ jobs:
           name: install-root-artifact
           path: node_modules
         
-  common:
+  install-common:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -84,7 +84,7 @@ jobs:
           name: install-common-artifact
           path: packages/common/node_modules
         
-  server:
+  install-server:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -108,7 +108,7 @@ jobs:
           name: install-server-artifact
           path: packages/server/node_modules
         
-  webapp:
+  install-webapp:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -133,7 +133,7 @@ jobs:
           path: packages/webapp/node_modules
         
   static-checks:
-    needs: [sonarqube, root, common, server, webapp]
+    needs: [sonarqube, install-root, install-common, install-server, install-webapp]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -171,7 +171,7 @@ jobs:
           echo Mock test-webapp
         
   build:
-    needs: [root, common, server, webapp]
+    needs: [install-root, install-common, install-server, install-webapp]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -217,7 +217,7 @@ jobs:
           name: build-webapp-artifact
           path: packages/webapp/build
         
-  main:
+  deploy:
     needs: [build]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -278,7 +278,7 @@ jobs:
           echo current directory:
           ls
 
-      - name: static-checks
+      - name: acceptance-tests
         run: |
           echo Mock npm-auth-acceptance-tests-cypress-folder
           echo Mock install-acceptance-tests-cypress
@@ -309,7 +309,7 @@ jobs:
           echo current directory:
           ls
 
-      - name: static-checks
+      - name: lighthouse-steps
         run: |
           echo Mock create-cypress-lighthouse-reports-dir
           echo Mock cypress-wait-for-server
@@ -339,7 +339,7 @@ jobs:
           echo current directory:
           ls
 
-      - name: static-checks
+      - name: cypress-steps
         run: |
           echo Mock create-cypress-lighthouse-reports-dir
           echo Mock cypress-wait-for-server
@@ -349,7 +349,7 @@ jobs:
           echo Mock cypress-perf-upload
         
   storybook:
-    needs: [root, common, server, webapp]
+    needs: [install-root, install-common, install-server, install-webapp]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -369,7 +369,7 @@ jobs:
           echo current directory:
           ls
 
-      - name: static-checks
+      - name: storybook-steps
         run: |
           echo Mock build-storybook
           echo Mock s3-publish-storybook
