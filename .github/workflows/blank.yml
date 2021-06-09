@@ -208,10 +208,14 @@ jobs:
       # upload
       - uses: actions/upload-artifact@master
         with:
-          name: build-artifact
-          path: |
-            packages/server/build
-            packages/webapp/build
+          name: buildServer-artifact
+          path: packages/server/build
+    
+      # upload
+      - uses: actions/upload-artifact@master
+        with:
+          name: buildWebapp-artifact
+          path: packages/webapp/build
         
   main:
     needs: [build]
@@ -232,7 +236,7 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: build-artifact
+          name: buildWebapp-artifact
           path: packages/webapp/build
 
       - name: check artifact
