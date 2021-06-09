@@ -55,13 +55,13 @@ jobs:
       - name: make-artifact
         run: |
           echo Mock make-artifact
-          mkdir -p path/to/rootArtifact
-          echo someRootArtifact > path/to/rootArtifact/rootArtifact.txt
+          mkdir -p node_modules
+          echo someRootArtifact > node_modules/rootArtifact.txt
     
       - uses: actions/upload-artifact@master
         with:
           name: root-artifact
-          path: path/to/rootArtifact
+          path: node_modules
         
   common:
     # The type of runner that the job will run on
@@ -121,7 +121,9 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: root-artifact
-          path: path/to/rootArtifact
+          path: node_modules
 
       - name: check rootArtifact
-        run: cat path/to/rootArtifact/rootArtifact.txt
+        run: |
+          ls
+          cat node_modules/rootArtifact.txt
