@@ -133,10 +133,22 @@ jobs:
           name: root-artifact
           path: node_modules
 
-      - name: check rootArtifact
+      - name: check artifact
         run: |
           ls
           cat node_modules/rootArtifact.txt
+
+      - name: build-webapp
+        run: |
+          echo Mock build-webapp
+          mkdir -p packages/webapp/build
+          echo someAppArtifact > packages/webapp/build/appArtifact.txt
+    
+      # upload
+      - uses: actions/upload-artifact@master
+        with:
+          name: appBuild-artifact
+          path: packages/webapp/build
         
   main:
     needs: [sonarqube, build]
@@ -154,7 +166,7 @@ jobs:
           name: root-artifact
           path: node_modules
 
-      - name: check rootArtifact
+      - name: check artifact
         run: |
           ls
           cat node_modules/rootArtifact.txt
