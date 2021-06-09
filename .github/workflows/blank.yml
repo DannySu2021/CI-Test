@@ -133,7 +133,7 @@ jobs:
           path: packages/webapp/node_modules
         
   static-checks:
-    needs: [root, common, server, webapp]
+    needs: [sonarqube, root, common, server, webapp]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -206,7 +206,7 @@ jobs:
           path: packages/webapp/build
         
   main:
-    needs: [sonarqube, build]
+    needs: [build]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -235,4 +235,121 @@ jobs:
           cat node_modules/rootArtifact.txt
           echo Read buildArtifact:
           cat packages/webapp/build/appArtifact.txt
+        
+  acceptance-test:
+    needs: [build]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: root-artifact
+          path: node_modules
+
+      - name: check artifact
+        run: |
+          echo current directory:
+          ls
+
+      - name: static-checks
+        run: |
+          echo Mock npm-auth-acceptance-tests-cypress-folder
+          echo Mock install-acceptance-tests-cypress
+          echo Mock cypress-wait-for-server
+          echo Mock lint-acceptance-tests-cypress
+          echo Mock cypress-a11y
+          echo Mock cypress-e2e
+          echo Mock cypress-perf-upload
+        
+  lighthouse:
+    needs: [build]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: root-artifact
+          path: node_modules
+
+      - name: check artifact
+        run: |
+          echo current directory:
+          ls
+
+      - name: static-checks
+        run: |
+          echo Mock create-cypress-lighthouse-reports-dir
+          echo Mock cypress-wait-for-server
+          echo Mock cypress-lighthouse-homepage
+          echo Mock cypress-lighthouse-combined-results
+          echo Mock cypress-lighthouse-reports-comment
+          echo Mock cypress-perf-upload
+        
+  cypress:
+    needs: [build]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: root-artifact
+          path: node_modules
+
+      - name: check artifact
+        run: |
+          echo current directory:
+          ls
+
+      - name: static-checks
+        run: |
+          echo Mock create-cypress-lighthouse-reports-dir
+          echo Mock cypress-wait-for-server
+          echo Mock cypress-lighthouse-homepage
+          echo Mock cypress-lighthouse-combined-results
+          echo Mock cypress-lighthouse-reports-comment
+          echo Mock cypress-perf-upload
+        
+  storybook:
+    needs: [root, common, server, webapp]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: root-artifact
+          path: node_modules
+
+      - name: check artifact
+        run: |
+          echo current directory:
+          ls
+
+      - name: static-checks
+        run: |
+          echo Mock build-storybook
+          echo Mock s3-publish-storybook
 
