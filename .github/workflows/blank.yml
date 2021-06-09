@@ -193,6 +193,12 @@ jobs:
           echo Read an artifact:
           cat node_modules/rootArtifact.txt
 
+      - name: build-server
+        run: |
+          echo Mock build-server
+          mkdir -p packages/server/build
+          echo someServerArtifact > packages/server/build/serverArtifact.txt
+
       - name: build-webapp
         run: |
           echo Mock build-webapp
@@ -202,8 +208,10 @@ jobs:
       # upload
       - uses: actions/upload-artifact@master
         with:
-          name: appBuild-artifact
-          path: packages/webapp/build
+          name: build-artifact
+          path: |
+            packages/server/build
+            packages/webapp/build
         
   main:
     needs: [build]
@@ -224,7 +232,7 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: appBuild-artifact
+          name: build-artifact
           path: packages/webapp/build
 
       - name: check artifact
@@ -235,6 +243,15 @@ jobs:
           cat node_modules/rootArtifact.txt
           echo Read buildArtifact:
           cat packages/webapp/build/appArtifact.txt
+
+      - name: steps after build
+        run: |
+          echo Mock bundlesize
+          echo Mock fetch-translations
+          echo Mock generate-translated-routes
+          echo Mock build-translations
+          echo Mock skyscanner-api-gateway-tallyman
+          echo Mock skyscanner-api-gateway-banana
         
   acceptance-test:
     needs: [build]
