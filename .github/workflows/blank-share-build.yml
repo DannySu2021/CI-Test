@@ -50,6 +50,9 @@ jobs:
       - name: install-xxx
         run: |
           npm install
+          npm install --prefix packages/common
+          npm install --prefix packages/server
+          npm install --prefix packages/webapp
 
       - name: storybook-steps
         run: |
