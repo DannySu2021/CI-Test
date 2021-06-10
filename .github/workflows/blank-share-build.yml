@@ -36,9 +36,28 @@ jobs:
 
       - name: sonarqube
         run: echo Mock sonarqube
+        
+  storybook:
+    # needs: [install-root, install-common, install-server, install-webapp]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: storybook-steps
+        run: |
+          echo Mock install-root
+          echo Mock install-common
+          echo Mock install-server
+          echo Mock install-webapp
+          echo Mock build-storybook
+          echo Mock s3-publish-storybook
 
   static-checks:
-    needs: [sonarqube]
+    # needs: [sonarqube]
     # needs: [sonarqube, install-root, install-common, install-server, install-webapp]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -93,18 +112,20 @@ jobs:
           echo someAppArtifact > packages/webapp/build/appArtifact.txt
     
       # upload
-      - uses: actions/upload-artifact@master
-        with:
-          name: build-server-artifact
-          path: packages/server/build
+      - name: upload build-server artifact
+        uses: actions/upload-artifact@master
+          with:
+            name: build-server-artifact
+            path: packages/server/build
     
       # upload
-      - uses: actions/upload-artifact@master
-        with:
-          name: build-webapp-artifact
-          path: packages/webapp/build
+      - name: upload build-webapp artifact
+        uses: actions/upload-artifact@master
+          with:
+            name: build-webapp-artifact
+            path: packages/webapp/build
         
-  deploy:
+  main:
     needs: [build]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -136,31 +157,6 @@ jobs:
           echo Mock skyscanner-api-gateway-tallyman
           echo Mock skyscanner-api-gateway-banana
         
-  acceptance-test:
-    needs: [build]
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: check artifact
-        run: |
-          echo current directory:
-          ls
-
-      - name: acceptance-tests
-        run: |
-          echo Mock npm-auth-acceptance-tests-cypress-folder
-          echo Mock install-acceptance-tests-cypress
-          echo Mock cypress-wait-for-server
-          echo Mock lint-acceptance-tests-cypress
-          echo Mock cypress-a11y
-          echo Mock cypress-e2e
-          echo Mock cypress-perf-upload
-        
   lighthouse:
     needs: [build]
     # The type of runner that the job will run on
@@ -185,7 +181,32 @@ jobs:
           echo Mock cypress-lighthouse-reports-comment
           echo Mock cypress-perf-upload
         
-  cypress:
+  cypress-acceptance,a11y,e2e:
+    needs: [build]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: check artifact
+        run: |
+          echo current directory:
+          ls
+
+      - name: acceptance-tests
+        run: |
+          echo Mock npm-auth-acceptance-tests-cypress-folder
+          echo Mock install-acceptance-tests-cypress
+          echo Mock cypress-wait-for-server
+          echo Mock lint-acceptance-tests-cypress
+          echo Mock cypress-a11y
+          echo Mock cypress-e2e
+          echo Mock cypress-perf-upload
+        
+  cypress-gb,ru:
     needs: [build]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -208,23 +229,4 @@ jobs:
           echo Mock cypress-lighthouse-combined-results
           echo Mock cypress-lighthouse-reports-comment
           echo Mock cypress-perf-upload
-        
-  storybook:
-    # needs: [install-root, install-common, install-server, install-webapp]
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: storybook-steps
-        run: |
-          echo Mock install-root
-          echo Mock install-common
-          echo Mock install-server
-          echo Mock install-webapp
-          echo Mock build-storybook
-          echo Mock s3-publish-storybook
 
