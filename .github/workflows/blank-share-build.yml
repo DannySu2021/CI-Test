@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install-xxx
-        run: |
+        run: &
           npm install
           npm install --prefix packages/common
           npm install --prefix packages/server
