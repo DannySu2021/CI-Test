@@ -112,18 +112,18 @@ jobs:
           echo someAppArtifact > packages/webapp/build/appArtifact.txt
     
       # upload
-      # name: upload build-server artifact
-      - uses: actions/upload-artifact@master
-          with:
-            name: build-server-artifact
-            path: packages/server/build
+      - name: upload build-server artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: build-server-artifact
+          path: packages/server/build
     
       # upload
-      # name: upload build-webapp artifact
-      - uses: actions/upload-artifact@master
-          with:
-            name: build-webapp-artifact
-            path: packages/webapp/build
+      - name: upload build-webapp artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: build-webapp-artifact
+          path: packages/webapp/build
         
   main:
     needs: [build]
