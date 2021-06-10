@@ -117,12 +117,6 @@ jobs:
       # download
       - uses: actions/download-artifact@master
         with:
-          name: install-root-artifact
-          path: node_modules
-
-      # download
-      - uses: actions/download-artifact@master
-        with:
           name: build-webapp-artifact
           path: packages/webapp/build
 
@@ -154,12 +148,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # download
-      - uses: actions/download-artifact@master
-        with:
-          name: install-root-artifact
-          path: node_modules
-
       - name: check artifact
         run: |
           echo current directory:
@@ -185,12 +173,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # download
-      - uses: actions/download-artifact@master
-        with:
-          name: install-root-artifact
-          path: node_modules
-
       - name: check artifact
         run: |
           echo current directory:
@@ -214,12 +196,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # download
-      - uses: actions/download-artifact@master
-        with:
-          name: install-root-artifact
-          path: node_modules
 
       - name: check artifact
         run: |
