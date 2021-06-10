@@ -59,11 +59,6 @@ jobs:
         with:
           name: install-root-artifact
           path: node_modules
-    
-      - uses: actions/upload-artifact@master
-        with:
-          name: test-upload
-          path: packages/webapp
         
   install-common:
     # The type of runner that the job will run on
