@@ -181,7 +181,7 @@ jobs:
           echo Mock cypress-lighthouse-reports-comment
           echo Mock cypress-perf-upload
         
-  cypress-acceptance,a11y,e2e:
+  cypress-acceptance_a11y_e2e:
     needs: [build]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -206,7 +206,7 @@ jobs:
           echo Mock cypress-e2e
           echo Mock cypress-perf-upload
         
-  cypress-gb,ru:
+  cypress-gb_ru:
     needs: [build]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
