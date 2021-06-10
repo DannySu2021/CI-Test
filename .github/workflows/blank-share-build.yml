@@ -124,8 +124,6 @@ jobs:
         run: |
           echo current directory:
           ls
-          echo Read rootArtifact:
-          cat node_modules/rootArtifact.txt
           echo Read buildArtifact:
           cat packages/webapp/build/appArtifact.txt
 
