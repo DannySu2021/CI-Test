@@ -255,34 +255,6 @@ jobs:
           echo Mock skyscanner-api-gateway-tallyman
           echo Mock skyscanner-api-gateway-banana
         
-  acceptance-test:
-    needs: [build]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      # download
-      - uses: actions/download-artifact@master
-        with:
-          name: install-root-artifact
-          path: node_modules
-
-      - name: check artifact
-        run: |
-          echo current directory:
-          ls
-
-      - name: acceptance-tests
-        run: |
-          echo Mock npm-auth-acceptance-tests-cypress-folder
-          echo Mock install-acceptance-tests-cypress
-          echo Mock cypress-wait-for-server
-          echo Mock lint-acceptance-tests-cypress
-          echo Mock cypress-a11y
-          echo Mock cypress-e2e
-          echo Mock cypress-perf-upload
-        
   lighthouse:
     needs: [build]
     runs-on: ubuntu-latest
@@ -290,18 +262,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # download
-      - uses: actions/download-artifact@master
-        with:
-          name: install-root-artifact
-          path: node_modules
-
-      - name: check artifact
-        run: |
-          echo current directory:
-          ls
-
-      - name: lighthouse-steps
+      - name: acceptance-tests
         run: |
           echo Mock create-cypress-lighthouse-reports-dir
           echo Mock cypress-wait-for-server
@@ -310,30 +271,58 @@ jobs:
           echo Mock cypress-lighthouse-reports-comment
           echo Mock cypress-perf-upload
         
-  cypress:
+  cypress-acceptance_a11y:
     needs: [build]
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      # download
-      - uses: actions/download-artifact@master
-        with:
-          name: install-root-artifact
-          path: node_modules
-
-      - name: check artifact
+      - name: lighthouse-steps
         run: |
-          echo current directory:
-          ls
+          echo Mock npm-auth-acceptance-tests-cypress-folder
+          echo Mock install-acceptance-tests-cypress
+          echo Mock cypress-wait-for-server
+          echo Mock lint-acceptance-tests-cypress
+          echo Mock cypress-a11y
+          echo Mock cypress-perf-upload
+        
+  cypress-e2e:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
 
       - name: cypress-steps
         run: |
-          echo Mock create-cypress-lighthouse-reports-dir
           echo Mock cypress-wait-for-server
-          echo Mock cypress-lighthouse-homepage
-          echo Mock cypress-lighthouse-combined-results
-          echo Mock cypress-lighthouse-reports-comment
+          echo Mock cypress-e2e
+          echo Mock cypress-perf-upload
+        
+  cypress-visual-gb:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: cypress-steps
+        run: |
+          echo Mock cypress-wait-for-server
+          echo Mock cypress-visual-gb
+          echo Mock cypress-perf-upload
+        
+  cypress-visual-ru:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: cypress-steps
+        run: |
+          echo Mock cypress-wait-for-server
+          echo Mock cypress-visual-ru
           echo Mock cypress-perf-upload
 
