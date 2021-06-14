@@ -48,6 +48,7 @@ jobs:
           mkdir -p node_modules
           echo someRootArtifact > node_modules/rootArtifact.txt
     
+      # upload root artifact
       - uses: actions/upload-artifact@master
         with:
           name: install-root-artifact
@@ -68,7 +69,7 @@ jobs:
           mkdir -p packages/common/node_modules
           echo someCommonArtifact > packages/common/node_modules/commonArtifact.txt
     
-      # upload
+      # upload common artifact
       - uses: actions/upload-artifact@master
         with:
           name: install-common-artifact
@@ -89,7 +90,7 @@ jobs:
           mkdir -p packages/server/node_modules
           echo someServerArtifact > packages/server/node_modules/serverArtifact.txt
     
-      # upload
+      # upload server artifact
       - uses: actions/upload-artifact@master
         with:
           name: install-server-artifact
@@ -110,7 +111,7 @@ jobs:
           mkdir -p packages/webapp/node_modules
           echo someAppArtifact > packages/webapp/node_modules/appArtifact.txt
     
-      # upload
+      # upload webapp artifact
       - uses: actions/upload-artifact@master
         with:
           name: install-webapp-artifact
@@ -123,7 +124,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # download
+      # download root artifact
       - uses: actions/download-artifact@master
         with:
           name: install-root-artifact
@@ -133,6 +134,8 @@ jobs:
         run: |
           echo current directory:
           ls
+          echo Read an artifact:
+          cat node_modules/rootArtifact.txt
 
       - name: storybook-steps
         run: |
@@ -146,22 +149,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # download
+      # download root artifact
       - uses: actions/download-artifact@master
         with:
           name: install-root-artifact
           path: node_modules
 
-      # download
-      - uses: actions/download-artifact@master
-        with:
-          name: install-common-artifact
-          path: packages/common/node_modules
-
       - name: check artifact
         run: |
           echo current directory:
           ls
+          echo Read an artifact:
+          cat node_modules/rootArtifact.txt
 
       - name: static-checks
         run: |
@@ -205,6 +204,12 @@ jobs:
           echo Mock build-webapp
           mkdir -p packages/webapp/build
           echo someAppArtifact > packages/webapp/build/appArtifact.txt
+
+      - name: steps after build
+        run: |
+          echo Mock fetch-translations
+          echo Mock generate-translated-routes
+          echo Mock build-translations
     
       # upload
       - uses: actions/upload-artifact@master
@@ -249,9 +254,6 @@ jobs:
       - name: steps after build
         run: |
           echo Mock bundlesize
-          echo Mock fetch-translations
-          echo Mock generate-translated-routes
-          echo Mock build-translations
           echo Mock skyscanner-api-gateway-tallyman
           echo Mock skyscanner-api-gateway-banana
         
