@@ -15,14 +15,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains banana testing job
   sonarqube:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: Run "danger" script
@@ -38,12 +34,9 @@ jobs:
         run: echo Mock sonarqube
         
   install-root:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: npm-auth-root-folder
@@ -61,12 +54,9 @@ jobs:
           path: node_modules
         
   install-common:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: npm-auth-common-folder
@@ -85,12 +75,9 @@ jobs:
           path: packages/common/node_modules
         
   install-server:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: npm-auth-server-folder
@@ -109,12 +96,9 @@ jobs:
           path: packages/server/node_modules
         
   install-webapp:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: npm-auth-webapp-folder
@@ -132,14 +116,34 @@ jobs:
           name: install-webapp-artifact
           path: packages/webapp/node_modules
         
-  static-checks:
-    needs: [sonarqube, install-root, install-common, install-server, install-webapp]
-    # The type of runner that the job will run on
+  storybook:
+    needs: [install-root, install-common, install-server, install-webapp]
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # download
+      - uses: actions/download-artifact@master
+        with:
+          name: install-root-artifact
+          path: node_modules
+
+      - name: check artifact
+        run: |
+          echo current directory:
+          ls
+
+      - name: storybook-steps
+        run: |
+          echo Mock build-storybook
+          echo Mock s3-publish-storybook
+        
+  static-checks:
+    needs: [install-root, install-common, install-server, install-webapp]
+    runs-on: ubuntu-latest
+
+    steps:
       - uses: actions/checkout@v2
 
       # download
@@ -172,12 +176,9 @@ jobs:
         
   build:
     needs: [install-root, install-common, install-server, install-webapp]
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # download
@@ -217,14 +218,11 @@ jobs:
           name: build-webapp-artifact
           path: packages/webapp/build
         
-  deploy:
+  ecr:
     needs: [build]
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # download
@@ -259,12 +257,9 @@ jobs:
         
   acceptance-test:
     needs: [build]
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # download
@@ -290,12 +285,9 @@ jobs:
         
   lighthouse:
     needs: [build]
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # download
@@ -320,12 +312,9 @@ jobs:
         
   cypress:
     needs: [build]
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # download
@@ -347,30 +336,4 @@ jobs:
           echo Mock cypress-lighthouse-combined-results
           echo Mock cypress-lighthouse-reports-comment
           echo Mock cypress-perf-upload
-        
-  storybook:
-    needs: [install-root, install-common, install-server, install-webapp]
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # download
-      - uses: actions/download-artifact@master
-        with:
-          name: install-root-artifact
-          path: node_modules
-
-      - name: check artifact
-        run: |
-          echo current directory:
-          ls
-
-      - name: storybook-steps
-        run: |
-          echo Mock build-storybook
-          echo Mock s3-publish-storybook
 
